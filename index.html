@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BEA&GIO">
+<title>BEA&GIO — Workspace</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080808;
+  --bg1: #0f0f0f;
+  --bg2: #141414;
+  --bg3: #1a1a1a;
+  --border: #1f1f1f;
+  --border2: #2a2a2a;
+  --text: #f0f0f0;
+  --text2: #777;
+  --text3: #444;
+  --green: #39ff6e;
+  --green2: rgba(57,255,110,0.08);
+  --green3: rgba(57,255,110,0.18);
+  --blue: #00c8ff;
+  --blue2: rgba(0,200,255,0.08);
+  --pink: #ff5fa0;
+  --pink2: rgba(255,95,160,0.08);
+  --amber: #ffb830;
+  --amber2: rgba(255,184,48,0.08);
+  --red: #ff4d4d;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+h1,h2,h3,.syne { font-family: 'Syne', sans-serif; }
+
+/* ── LAYOUT ── */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(8,8,8,0.95);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(20px);
+}
+.logo-mark {
+  font-family: 'Syne', sans-serif;
+  font-weight: 900; font-size: 18px;
+  letter-spacing: -0.05em;
+  color: var(--green);
+}
+.logo-sub { font-size: 9px; color: var(--text3); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 1px; }
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ── NAV ── */
+.nav {
+  display: flex; gap: 2px;
+  padding: 10px 14px 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--bg1);
+  position: sticky; top: 53px; z-index: 99;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  font-family: 'Syne', sans-serif;
+  background: transparent; border: none;
+  color: var(--text3); font-size: 11px; font-weight: 700;
+  padding: 8px 12px 10px;
+  cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: color 0.15s;
+}
+.nav-btn:hover { color: var(--text2); }
+.nav-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+/* ── SECTIONS ── */
+.section { display: none; padding: 18px 16px 80px; animation: fadeIn 0.2s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.card:last-child { margin-bottom: 0; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+
+/* ── BADGES ── */
+.badge {
+  font-family: 'Syne', sans-serif;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+}
+.badge-green { background: var(--green2); color: var(--green); border: 1px solid rgba(57,255,110,0.2); }
+.badge-blue { background: var(--blue2); color: var(--blue); border: 1px solid rgba(0,200,255,0.2); }
+.badge-pink { background: var(--pink2); color: var(--pink); border: 1px solid rgba(255,95,160,0.2); }
+.badge-amber { background: var(--amber2); color: var(--amber); border: 1px solid rgba(255,184,48,0.2); }
+.badge-red { background: rgba(255,77,77,0.08); color: var(--red); border: 1px solid rgba(255,77,77,0.2); }
+.badge-gray { background: var(--bg3); color: var(--text3); border: 1px solid var(--border2); }
+
+/* ── LABELS ── */
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700;
+  color: var(--text3); letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 10px; margin-top: 20px;
+}
+.section-label:first-child { margin-top: 0; }
+
+/* ── STATS GRID ── */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.stat-card {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px;
+  text-align: center;
+}
+.stat-num { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 900; color: var(--green); letter-spacing: -0.05em; line-height: 1; }
+.stat-label { font-size: 9px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── INPUTS ── */
+input[type=text], input[type=date], textarea, select {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 9px 12px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+input[type=text]:focus, input[type=date]:focus, textarea:focus, select:focus {
+  border-color: var(--green);
+}
+textarea { resize: vertical; min-height: 70px; }
+select { cursor: pointer; }
+select option { background: var(--bg3); }
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border-radius: 8px; padding: 10px 16px;
+  cursor: pointer; border: none;
+  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-primary { background: var(--green); color: #000; }
+.btn-primary:hover { background: #50ff85; }
+.btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+.btn-ghost:hover { background: var(--bg3); color: var(--text); }
+.btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(255,77,77,0.2); }
+.btn-danger:hover { background: rgba(255,77,77,0.08); }
+.btn-sm { padding: 6px 10px; font-size: 10px; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* ── KANBAN ── */
+.kanban-col {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.kanban-col-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.kanban-col-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+.kanban-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  padding: 11px 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.kanban-card:hover { border-color: var(--border2); }
+.kanban-card:last-child { margin-bottom: 0; }
+.kanban-card-title { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.kanban-card-desc { font-size: 11px; color: var(--text2); line-height: 1.5; margin-bottom: 8px; }
+.kanban-card-footer { display: flex; align-items: center; gap: 6px; justify-content: space-between; }
+.empty-col { font-size: 11px; color: var(--text3); padding: 8px 0; text-align: center; }
+
+/* ── CHECKLIST ── */
+.check-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.check-item:last-child { border-bottom: none; }
+.check-box {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 1.5px solid var(--border2);
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.check-box.checked { background: var(--green); border-color: var(--green); }
+.check-box.checked::after { content: '✓'; font-size: 11px; color: #000; font-weight: 800; }
+.check-text { font-size: 13px; color: var(--text); flex: 1; transition: all 0.15s; }
+.check-text.done { color: var(--text3); text-decoration: line-through; }
+
+/* ── TIMELINE ── */
+.tl-item { display: flex; gap: 14px; margin-bottom: 0; }
+.tl-left { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.tl-line { width: 1px; background: var(--border); flex: 1; margin: 4px 0; min-height: 20px; }
+.tl-content { flex: 1; padding-bottom: 20px; }
+.tl-date { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 5px; }
+.tl-items { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+.tl-bullet { display: flex; gap: 7px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+.tl-bullet::before { content: '▸'; flex-shrink: 0; margin-top: 1px; }
+
+/* ── GEAR ITEM ── */
+.gear-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.gear-item:last-child { border-bottom: none; }
+.gear-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.gear-name { font-weight: 600; font-size: 13px; color: var(--text); }
+.gear-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+
+/* ── PIPELINE ── */
+.pipe-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.pipe-step:last-child { border-bottom: none; }
+.pipe-icon-wrap {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.pipe-auto {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700;
+  color: var(--green); letter-spacing: 0.1em;
+  background: var(--green2); border: 1px solid rgba(57,255,110,0.2);
+  border-radius: 4px; padding: 2px 7px;
+  flex-shrink: 0;
+}
+.pipe-human {
+  font-family: 'Syne', sans-serif;
+  font-size: 9px; font-weight: 700;
+  color: var(--amber); letter-spacing: 0.1em;
+  background: var(--amber2); border: 1px solid rgba(255,184,48,0.2);
+  border-radius: 4px; padding: 2px 7px;
+  flex-shrink: 0;
+}
+
+/* ── ADD FORMS ── */
+.add-form {
+  background: var(--bg1);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  display: none;
+}
+.add-form.open { display: block; }
+.form-row { margin-bottom: 10px; }
+.form-label { font-size: 10px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; font-family: 'Syne', sans-serif; font-weight: 700; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* ── MODALS ── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg1);
+  border: 1px solid var(--border2);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 18px 34px;
+  width: 100%;
+  max-width: 500px;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.modal-close { background: var(--bg3); border: none; color: var(--text2); font-size: 18px; cursor: pointer; border-radius: 6px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--green); color: #000;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.06em;
+  padding: 10px 18px; border-radius: 20px;
+  opacity: 0; pointer-events: none;
+  transition: all 0.3s;
+  z-index: 300; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── FORMAT IDEA CARD ── */
+.idea-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 15px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.idea-card::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle at top right, rgba(57,255,110,0.05), transparent 70%);
+}
+.idea-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px; font-weight: 900;
+  color: var(--bg3); letter-spacing: -0.06em;
+  line-height: 1; position: absolute; top: 8px; right: 14px;
+}
+.idea-title { font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 5px; }
+.idea-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.idea-footer { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+/* ── FAB ── */
+.fab {
+  position: fixed; bottom: 20px; right: 18px;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--green); border: none;
+  font-size: 24px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(57,255,110,0.3);
+  z-index: 150;
+  transition: all 0.15s;
+}
+.fab:hover { transform: scale(1.05); }
+.fab:active { transform: scale(0.95); }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+/* ── DELETE BTN ── */
+.del-btn { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 2px 4px; flex-shrink: 0; }
+.del-btn:hover { color: var(--red); }
+
+/* ── TREND CARD ── */
+.trend-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 15px; margin-bottom: 10px;
+}
+.trend-score {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  color: var(--text3); letter-spacing: 0.06em;
+}
+.trend-title { font-weight: 700; font-size: 14px; margin: 4px 0; }
+.trend-hook {
+  background: var(--bg3); border-left: 2px solid var(--green);
+  border-radius: 0 6px 6px 0; padding: 8px 10px;
+  font-size: 12px; color: var(--green);
+  font-style: italic; margin: 8px 0; line-height: 1.5;
+}
+.trend-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="logo-mark">BEA&amp;GIO</div>
+      <div class="logo-sub">Manager Workspace</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="status-dot"></div>
+      <span style="font-size:10px;color:var(--text3);font-family:'Syne',sans-serif;letter-spacing:0.08em;">LIVE</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showTab('home',this)">Home</button>
+    <button class="nav-btn" onclick="showTab('kanban',this)">Video</button>
+    <button class="nav-btn" onclick="showTab('agenda',this)">Agenda</button>
+    <button class="nav-btn" onclick="showTab('trend',this)">Trend</button>
+    <button class="nav-btn" onclick="showTab('pipeline',this)">Editing</button>
+    <button class="nav-btn" onclick="showTab('gear',this)">Gear</button>
+  </nav>
+
+  <!-- ═══════════════════════════════ HOME ═══════════════════════════════ -->
+  <div id="tab-home" class="section active">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-pub">0</div>
+        <div class="stat-label">Pubblicati</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-ideas">—</div>
+        <div class="stat-label">In backlog</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-events" style="color:var(--blue)">—</div>
+        <div class="stat-label">Prossimo evento</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-days" style="color:var(--amber)">—</div>
+        <div class="stat-label">Giorni al kick-off</div>
+      </div>
+    </div>
+
+    <div class="section-label">Priorità ora</div>
+    <div class="card">
+      <div class="card-header">
+        <span style="font-weight:700;font-size:14px">🎯 Primo video</span>
+        <span class="badge badge-green">PRIORITÀ 1</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px">
+        Carta Forbice Sasso + Cibo. Chi perde corre. Telecamera fissa, un take, zero editing. <strong style="color:var(--text)">Verona, 15 Giugno.</strong>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-blue">One-Take</span>
+        <span class="badge badge-amber">15 Giu · Verona</span>
+      </div>
+    </div>
+
+    <div class="section-label">Note rapide</div>
+    <div class="card" style="padding-bottom:10px">
+      <textarea id="home-notes" placeholder="Scrivi note veloci qui..." rows="4" style="background:transparent;border:none;padding:0;font-size:13px;color:var(--text);resize:none;width:100%;outline:none" oninput="saveNotes()"></textarea>
+    </div>
+
+    <div class="section-label">Setup in arrivo</div>
+    <div class="card">
+      <div class="gear-item">
+        <div class="gear-icon">📱</div>
+        <div style="flex:1"><div class="gear-name">iPhone</div><div class="gear-sub">Disponibile ora</div></div>
+        <span class="badge badge-green">READY</span>
+      </div>
+      <div class="gear-item">
+        <div class="gear-icon">🎥</div>
+        <div style="flex:1"><div class="gear-name">DJI Osmo Mobile 8P</div><div class="gear-sub">Gimbal stabilizzato</div></div>
+        <span class="badge badge-amber">IN ARRIVO</span>
+      </div>
+      <div class="gear-item" style="border:none">
+        <div class="gear-icon">🎙️</div>
+        <div style="flex:1"><div class="gear-name">DJI Mic Mini 2 × 2</div><div class="gear-sub">Ricevitore incluso</div></div>
+        <span class="badge badge-amber">IN ARRIVO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ KANBAN ═══════════════════════════════ -->
+  <div id="tab-kanban" class="section">
+
+    <div class="section-label" style="margin-top:0">Aggiungi video</div>
+    <div id="add-video-form" class="add-form">
+      <div class="form-row">
+        <div class="form-label">Titolo</div>
+        <input type="text" id="new-title" placeholder="Es: Who's More Likely To...">
+      </div>
+      <div class="form-row">
+        <div class="form-label">Descrizione breve</div>
+        <input type="text" id="new-desc" placeholder="Idea in una riga">
+      </div>
+      <div class="form-row-2">
+        <div>
+          <div class="form-label">Formato</div>
+          <select id="new-format">
+            <option value="challenge">Challenge</option>
+            <option value="short">Short</option>
+            <option value="vlog">Vlog</option>
+            <option value="voxpop">Vox Pop</option>
+            <option value="mukbang">Mukbang</option>
+            <option value="altro">Altro</option>
+          </select>
+        </div>
+        <div>
+          <div class="form-label">Colonna</div>
+          <select id="new-col">
+            <option value="idea">Idea</option>
+            <option value="wip">In Sviluppo</option>
+            <option value="ready">Pronto</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-primary btn-sm" onclick="addVideo()">Salva</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleForm('add-video-form')">Annulla</button>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost btn-full" style="margin-bottom:14px" onclick="toggleForm('add-video-form')">+ Nuovo video</button>
+
+    <div id="col-idea"></div>
+    <div id="col-wip"></div>
+    <div id="col-ready"></div>
+    <div id="col-done"></div>
+  </div>
+
+  <!-- ═══════════════════════════════ AGENDA ═══════════════════════════════ -->
+  <div id="tab-agenda" class="section">
+
+    <div class="section-label" style="margin-top:0">Aggiungi evento</div>
+    <div id="add-event-form" class="add-form">
+      <div class="form-row">
+        <div class="form-label">Titolo evento</div>
+        <input type="text" id="ev-title" placeholder="Es: Riprese a Verona">
+      </div>
+      <div class="form-row-2">
+        <div>
+          <div class="form-label">Data</div>
+          <input type="date" id="ev-date">
+        </div>
+        <div>
+          <div class="form-label">Tipo</div>
+          <select id="ev-type">
+            <option value="ripresa">📍 Ripresa</option>
+            <option value="viaggio">✈️ Viaggio</option>
+            <option value="upload">📤 Upload</option>
+            <option value="altro">📌 Altro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label">Note</div>
+        <input type="text" id="ev-note" placeholder="Dettagli opzionali">
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-primary btn-sm" onclick="addEvent()">Salva</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleForm('add-event-form')">Annulla</button>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost btn-full" style="margin-bottom:14px" onclick="toggleForm('add-event-form')">+ Aggiungi data</button>
+
+    <div id="events-list"></div>
+
+    <div class="divider"></div>
+    <div class="section-label">Checklist pre-Verona</div>
+    <div class="card" id="checklist-wrap"></div>
+  </div>
+
+  <!-- ═══════════════════════════════ TREND ═══════════════════════════════ -->
+  <div id="tab-trend" class="section">
+
+    <div class="section-label" style="margin-top:0">Trend caldi — Maggio 2026</div>
+
+    <div class="trend-card">
+      <div class="trend-score">🔥 ESPLOSO ORA</div>
+      <div class="trend-title">Chaos Challenge Fisici</div>
+      <div class="trend-hook">"Abbiamo provato [cosa]. Risultato: disastroso."</div>
+      <div class="trend-desc">Setup semplice → tentativo → fallimento comico → reazione autentica. Il montage dei fallimenti ripetuti batte qualsiasi video perfetto. <strong style="color:var(--text)">CFS Food è esattamente questo.</strong></div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="badge badge-green">One-Take</span><span class="badge badge-green">Zero editing</span><span class="badge badge-green">Adatto subito</span>
+      </div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-score">🔥 BREAKOUT DUO</div>
+      <div class="trend-title">Life Mission Carousel</div>
+      <div class="trend-hook">"I suoi obiettivi vs quello che vuole davvero"</div>
+      <div class="trend-desc">Slide 1: lei lista i suoi obiettivi. Slide 2: lui interrompe con quello che vuole davvero (mangiare dal suo piatto). Slide 3: lei con lo sguardo. Carousel 3 slide, zero parlato.</div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="badge badge-blue">Carousel</span><span class="badge badge-blue">Verona perfetta</span>
+      </div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-score">📈 ENGAGEMENT ALTISSIMO</div>
+      <div class="trend-title">Who's More Likely To</div>
+      <div class="trend-hook">"Chi di noi è più probabile che [cosa imbarazzante]?"</div>
+      <div class="trend-desc">Lui e lei indicano l'altro simultaneamente. La gente vota nei commenti. Retention altissima perché ogni risposta è una micro-rivelazione. Si gira in 5 minuti, zero editing.</div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="badge badge-amber">Secondo video</span><span class="badge badge-amber">Pillar ricorrente</span>
+      </div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-score">🔄 ANCORA VIVO</div>
+      <div class="trend-title">Lying Challenge</div>
+      <div class="trend-hook">"POV: lei mente. Io lo so sempre."</div>
+      <div class="trend-desc">Uno mente su qualcosa di semplice, l'altro deve smascherarlo. Perfetto perché lui può fare il "giudice" con autorevolezza reale. Lui in camera, lei di spalle che "prepara" la bugia.</div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="badge badge-pink">Comedy</span><span class="badge badge-pink">Identity format</span>
+      </div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-score">🎵 AUDIO TRENDING</div>
+      <div class="trend-title">"Self Aware" — Temper City</div>
+      <div class="trend-hook">"Prima / adesso" — prima del viaggio vs durante</div>
+      <div class="trend-desc">Re-esploso in questo momento. Text overlay su clip estetiche. Per voi: aspettative vs realtà del viaggio, oppure "quello che la gente pensa di noi / quello che siamo davvero".</div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="badge badge-gray">Dopo i primi video</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Note trend personali</div>
+    <div class="card">
+      <textarea id="trend-notes" placeholder="Aggiungi trend che vedi sul tuo FYP..." rows="4" style="background:transparent;border:none;padding:0;font-size:13px;color:var(--text);resize:none;width:100%;outline:none" oninput="saveTrendNotes()"></textarea>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ PIPELINE ═══════════════════════════════ -->
+  <div id="tab-pipeline" class="section">
+    <div class="section-label" style="margin-top:0">Short / Reels — Pipeline automatizzata</div>
+    <div class="card">
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">🔴</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Registrazione</div><div style="font-size:11px;color:var(--text2)">iPhone + Osmo 8P · DJI Mic Mini 2</div></div>
+        <div class="pipe-human">MANUALE</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">✂️</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Auto-Cut silenzi</div><div style="font-size:11px;color:var(--text2)">CapCut Pro — rimozione pause automatica</div></div>
+        <div class="pipe-auto">AUTO</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">💬</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Auto-Captions</div><div style="font-size:11px;color:var(--text2)">CapCut Pro — sottotitoli dinamici</div></div>
+        <div class="pipe-auto">AUTO</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">🎵</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Musica / Sound</div><div style="font-size:11px;color:var(--text2)">Libreria TikTok — scelta trend manuale</div></div>
+        <div class="pipe-human">~10 MIN</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">👁️</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Human revision</div><div style="font-size:11px;color:var(--text2)">Testi overlay, thumbnail, ritocco finale</div></div>
+        <div class="pipe-human">~15 MIN</div>
+      </div>
+      <div class="pipe-step" style="border:none">
+        <div class="pipe-icon-wrap">📤</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Upload + Mirror</div><div style="font-size:11px;color:var(--text2)">TikTok → IG Reels → YT Shorts · No watermark</div></div>
+        <div class="pipe-auto">AUTO</div>
+      </div>
+    </div>
+
+    <div class="section-label">Vlog lungo — DaVinci Resolve</div>
+    <div class="card">
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">⚡</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Rough cut</div><div style="font-size:11px;color:var(--text2)">CapCut — struttura base, tagli grossi</div></div>
+        <div class="pipe-human">~30 MIN</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon-wrap">🎬</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Color grade + mix</div><div style="font-size:11px;color:var(--text2)">DaVinci Resolve — tocco autoriale</div></div>
+        <div class="pipe-human">~2 ORE</div>
+      </div>
+      <div class="pipe-step" style="border:none">
+        <div class="pipe-icon-wrap">📦</div>
+        <div style="flex:1"><div style="font-weight:600;font-size:13px">Export + Upload</div><div style="font-size:11px;color:var(--text2)">YouTube principale · TikTok cut 10min</div></div>
+        <div class="pipe-human">MANUALE</div>
+      </div>
+    </div>
+
+    <div class="section-label">Checklist revisione Short</div>
+    <div class="card" id="pipeline-checklist"></div>
+  </div>
+
+  <!-- ═══════════════════════════════ GEAR ═══════════════════════════════ -->
+  <div id="tab-gear" class="section">
+    <div class="section-label" style="margin-top:0">Attrezzatura</div>
+    <div class="card">
+      <div class="gear-item">
+        <div class="gear-icon">📱</div>
+        <div style="flex:1"><div class="gear-name">iPhone</div><div class="gear-sub">4K 60fps · Cinematic Mode · Verticale 9:16</div></div>
+        <span class="badge badge-green">READY</span>
+      </div>
+      <div class="gear-item">
+        <div class="gear-icon">🎥</div>
+        <div style="flex:1"><div class="gear-name">DJI Osmo Mobile 8P</div><div class="gear-sub">Gimbal 3 assi · Tracking automatico</div></div>
+        <span class="badge badge-amber">IN ARRIVO</span>
+      </div>
+      <div class="gear-item" style="border:none">
+        <div class="gear-icon">🎙️</div>
+        <div style="flex:1"><div class="gear-name">DJI Mic Mini 2 × 2</div><div class="gear-sub">Wireless · Ricevitore incluso · 2 tx separati</div></div>
+        <span class="badge badge-amber">IN ARRIVO</span>
+      </div>
+    </div>
+
+    <div class="section-label">Setup per CFS Food Challenge</div>
+    <div class="card" style="background:rgba(57,255,110,0.04);border-color:rgba(57,255,110,0.15)">
+      <div style="font-size:13px;color:var(--text2);line-height:1.75">
+        📱 <strong style="color:var(--text)">iPhone fisso sul tavolo</strong> — niente gimbal per questo video. Camera ferma = autenticità.<br><br>
+        🎙️ <strong style="color:var(--text)">DJI Mic Mini 2</strong> uno a testa, registrazione separata su canali distinti.<br><br>
+        ☀️ <strong style="color:var(--text)">Luce naturale</strong> da finestra. Niente luci artificiali.<br><br>
+        📐 <strong style="color:var(--text)">Formato verticale 9:16</strong>, camera leggermente dall'alto sul tavolo.
+      </div>
+    </div>
+
+    <div class="section-label">Software</div>
+    <div class="card">
+      <div class="gear-item">
+        <div class="gear-icon">✂️</div>
+        <div style="flex:1"><div class="gear-name">CapCut Pro</div><div class="gear-sub">Auto-cut · Captions · Export multipiattaforma</div></div>
+        <span class="badge badge-green">80%</span>
+      </div>
+      <div class="gear-item" style="border:none">
+        <div class="gear-icon">🎬</div>
+        <div style="flex:1"><div class="gear-name">DaVinci Resolve</div><div class="gear-sub">Solo vlog lunghi · Color · Mix finale</div></div>
+        <span class="badge badge-blue">20%</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════ STATE ═══════════════
+const KEY = 'beagio_v2';
+let state = {
+  notes: '',
+  trendNotes: '',
+  videos: [
+    {id:1, title:'Carta Forbice Sasso Food', desc:'Tavolo fisso, one take, chi perde corre.', format:'challenge', col:'wip'},
+    {id:2, title:'Who\'s More Likely To', desc:'Lui e lei indicano l\'altro simultaneamente. Commenti attivi.', format:'short', col:'idea'},
+    {id:3, title:'Verona Vlog', desc:'Giornata reale, percorsi sbagliati, cibo, dinamiche di coppia.', format:'vlog', col:'idea'},
+    {id:4, title:'Street Interview coppie', desc:'Fermare coppie per strada, domande scomode.', format:'voxpop', col:'idea'},
+  ],
+  events: [
+    {id:1, title:'Kick-off Verona', date:'2025-06-15', type:'ripresa', note:'Primo video ufficiale · CFS Food + materiale vlog'},
+    {id:2, title:'Brighton Solo Trip', date:'', type:'viaggio', note:'Data TBD · Solo Gio'},
+  ],
+  checks: [
+    {id:1, text:'Osmo Mobile 8P arrivato e configurato', done:false},
+    {id:2, text:'DJI Mic Mini 2 testati con iPhone', done:false},
+    {id:3, text:'CapCut Pro installato', done:false},
+    {id:4, text:'Location con buona luce naturale trovata', done:false},
+    {id:5, text:'Cibo per la challenge deciso', done:false},
+    {id:6, text:'Test-shot fatto prima del 15 Giugno', done:false},
+  ],
+  pipeChecks: [
+    {id:1, text:'Primo secondo ha hook visivo chiaro', done:false},
+    {id:2, text:'Silenzi rimossi (auto-cut ok)', done:false},
+    {id:3, text:'Captions leggibili e in sync', done:false},
+    {id:4, text:'Audio bilanciato (non clipping)', done:false},
+    {id:5, text:'Nessuna pausa morta nel mezzo', done:false},
+    {id:6, text:'Chiusura netta (no fade lento)', done:false},
+    {id:7, text:'Thumbnail creata', done:false},
+    {id:8, text:'Caption TikTok con hashtag pronti', done:false},
+  ]
+};
+
+function load() {
+  try {
+    const s = localStorage.getItem(KEY);
+    if (s) state = {...state, ...JSON.parse(s)};
+  } catch(e){}
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){}
+}
+load();
+
+// ═══════════════ TOAST ═══════════════
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+// ═══════════════ TAB NAV ═══════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  render();
+}
+
+function toggleForm(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ═══════════════ NOTES ═══════════════
+function saveNotes() {
+  state.notes = document.getElementById('home-notes').value;
+  save();
+}
+function saveTrendNotes() {
+  state.trendNotes = document.getElementById('trend-notes').value;
+  save();
+}
+
+// ═══════════════ FORMAT LABELS ═══════════════
+const fmtLabel = {challenge:'Challenge',short:'Short',vlog:'Vlog',voxpop:'Vox Pop',mukbang:'Mukbang',altro:'Altro'};
+const fmtBadge = {challenge:'badge-green',short:'badge-blue',vlog:'badge-amber',voxpop:'badge-pink',mukbang:'badge-amber',altro:'badge-gray'};
+const evIcon = {ripresa:'📍',viaggio:'✈️',upload:'📤',altro:'📌'};
+
+// ═══════════════ KANBAN ═══════════════
+const cols = [
+  {id:'idea', label:'Idea / Backlog', color:'var(--text3)'},
+  {id:'wip', label:'In Sviluppo', color:'var(--blue)'},
+  {id:'ready', label:'Pronto da girare', color:'var(--amber)'},
+  {id:'done', label:'Pubblicato', color:'var(--green)'},
+];
+
+function renderKanban() {
+  cols.forEach(col => {
+    const vids = state.videos.filter(v => v.col === col.id);
+    const wrap = document.getElementById('col-' + col.id);
+    if (!wrap) return;
+    wrap.innerHTML = `
+      <div class="kanban-col">
+        <div class="kanban-col-header">
+          <span class="kanban-col-title" style="color:${col.color}">${col.label}</span>
+          <span class="badge badge-gray">${vids.length}</span>
+        </div>
+        ${vids.length === 0 ? '<div class="empty-col">Nessun video</div>' : vids.map(v => `
+          <div class="kanban-card">
+            <div class="kanban-card-title">${v.title}</div>
+            <div class="kanban-card-desc">${v.desc}</div>
+            <div class="kanban-card-footer">
+              <span class="badge ${fmtBadge[v.format]}">${fmtLabel[v.format]}</span>
+              <div style="display:flex;gap:4px">
+                ${v.col !== 'done' ? `<button class="btn btn-ghost btn-sm" onclick="moveVideo(${v.id})">→ Avanza</button>` : ''}
+                <button class="del-btn" onclick="deleteVideo(${v.id})" title="Elimina">✕</button>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  });
+  document.getElementById('stat-ideas').textContent = state.videos.filter(v => v.col === 'idea').length;
+  document.getElementById('stat-pub').textContent = state.videos.filter(v => v.col === 'done').length;
+}
+
+function addVideo() {
+  const title = document.getElementById('new-title').value.trim();
+  if (!title) { toast('Aggiungi un titolo'); return; }
+  const id = Date.now();
+  state.videos.push({
+    id,
+    title,
+    desc: document.getElementById('new-desc').value.trim() || '',
+    format: document.getElementById('new-format').value,
+    col: document.getElementById('new-col').value,
+  });
+  save();
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-desc').value = '';
+  toggleForm('add-video-form');
+  renderKanban();
+  toast('Video aggiunto ✓');
+}
+
+function moveVideo(id) {
+  const order = ['idea','wip','ready','done'];
+  const v = state.videos.find(v => v.id === id);
+  if (!v) return;
+  const idx = order.indexOf(v.col);
+  if (idx < order.length - 1) v.col = order[idx + 1];
+  save(); renderKanban();
+  toast('Spostato → ' + cols[order.indexOf(v.col)].label);
+}
+
+function deleteVideo(id) {
+  state.videos = state.videos.filter(v => v.id !== id);
+  save(); renderKanban(); toast('Eliminato');
+}
+
+// ═══════════════ EVENTS ═══════════════
+function renderEvents() {
+  const el = document.getElementById('events-list');
+  if (!el) return;
+  const sorted = [...state.events].sort((a,b) => {
+    if (!a.date) return 1; if (!b.date) return -1;
+    return new Date(a.date) - new Date(b.date);
+  });
+  const nextDate = sorted.find(e => e.date && new Date(e.date) >= new Date());
+  if (nextDate) {
+    const days = Math.ceil((new Date(nextDate.date) - new Date()) / 86400000);
+    document.getElementById('stat-days').textContent = days + 'g';
+    document.getElementById('stat-events').textContent = new Date(nextDate.date).toLocaleDateString('it', {day:'2-digit',month:'2-digit'});
+  }
+  el.innerHTML = sorted.map((ev,i) => `
+    <div class="card" style="position:relative">
+      <div style="display:flex;gap:12px">
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div class="tl-dot" style="background:${ev.date ? 'var(--green)' : 'var(--text3)'}"></div>
+          ${i < sorted.length-1 ? '<div class="tl-line"></div>' : ''}
+        </div>
+        <div style="flex:1;padding-bottom:4px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap">
+            <span class="badge ${ev.date ? 'badge-green' : 'badge-gray'}">${ev.date ? new Date(ev.date+'T12:00:00').toLocaleDateString('it',{day:'2-digit',month:'short',year:'numeric'}) : 'TBD'}</span>
+            <span style="font-size:14px">${evIcon[ev.type]||'📌'}</span>
+            <span style="font-weight:700;font-size:13px">${ev.title}</span>
+          </div>
+          ${ev.note ? `<div style="font-size:12px;color:var(--text2)">${ev.note}</div>` : ''}
+        </div>
+        <button class="del-btn" onclick="deleteEvent(${ev.id})" style="align-self:flex-start">✕</button>
+      </div>
+    </div>`).join('') || '<div style="color:var(--text3);font-size:13px;padding:8px 0">Nessun evento. Aggiungine uno!</div>';
+}
+
+function addEvent() {
+  const title = document.getElementById('ev-title').value.trim();
+  if (!title) { toast('Aggiungi un titolo'); return; }
+  state.events.push({
+    id: Date.now(),
+    title,
+    date: document.getElementById('ev-date').value,
+    type: document.getElementById('ev-type').value,
+    note: document.getElementById('ev-note').value.trim(),
+  });
+  save();
+  document.getElementById('ev-title').value = '';
+  document.getElementById('ev-date').value = '';
+  document.getElementById('ev-note').value = '';
+  toggleForm('add-event-form');
+  renderEvents(); toast('Evento salvato ✓');
+}
+
+function deleteEvent(id) {
+  state.events = state.events.filter(e => e.id !== id);
+  save(); renderEvents(); toast('Eliminato');
+}
+
+// ═══════════════ CHECKLISTS ═══════════════
+function renderChecklist(checks, containerId, saveKey) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = checks.map((c,i) => `
+    <div class="check-item" onclick="toggleCheck('${saveKey}',${i})">
+      <div class="check-box ${c.done ? 'checked' : ''}"></div>
+      <span class="check-text ${c.done ? 'done' : ''}">${c.text}</span>
+    </div>`).join('');
+}
+
+function toggleCheck(key, idx) {
+  state[key][idx].done = !state[key][idx].done;
+  save();
+  if (key === 'checks') renderChecklist(state.checks, 'checklist-wrap', 'checks');
+  if (key === 'pipeChecks') renderChecklist(state.pipeChecks, 'pipeline-checklist', 'pipeChecks');
+}
+
+// ═══════════════ RENDER ALL ═══════════════
+function render() {
+  document.getElementById('home-notes').value = state.notes;
+  document.getElementById('trend-notes').value = state.trendNotes;
+  renderKanban();
+  renderEvents();
+  renderChecklist(state.checks, 'checklist-wrap', 'checks');
+  renderChecklist(state.pipeChecks, 'pipeline-checklist', 'pipeChecks');
+}
+
+render();
+</script>
+</body>
+</html>
